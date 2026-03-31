@@ -1,3 +1,5 @@
+// [START solution_code]
+
 import { Injectable, OnDestroy } from '@angular/core';
 import { GoogleGenAI } from '@google/genai';
 import { EventBus } from '../../game/core/EventBus';
@@ -40,6 +42,8 @@ export class GeminiService implements ModelBackend, OnDestroy {
     this.history = [];
     this.lastTool = "[]";
   }
+
+  // [END solution_code]
 
   private constructToolList(tool_list: string) {
     if (tool_list) {

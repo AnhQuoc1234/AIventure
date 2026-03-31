@@ -16,7 +16,7 @@ AIventure is a top-down exploration game where players navigate a grid-based wor
 *   **Zelda-Style Camera:** Camera transitions between screen-sized rooms.
 *   **Interactive Objects:** Support for blockers, chat interactions, and external links.
 *   **Smart NPCs:** Autonomous characters that can patrol, follow the player, or execute AI-driven commands.
-*   **AI Integration:** Deep integration with Google Gemini for NPC interactions and puzzle solving.
+*   **Dual AI Integration:** Seamlessly powered by **Google Gemini** and **Gemma** to drive sophisticated NPC dialogues and dynamic puzzle-solving logic.
 
 ## UI in Angular
 

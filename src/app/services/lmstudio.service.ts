@@ -1,3 +1,5 @@
+// [START solution_code]
+
 import { Injectable, OnDestroy } from '@angular/core';
 import { EventBus } from '../../game/core/EventBus';
 import { ModelBackend } from './model-backend.interface';
@@ -12,6 +14,8 @@ export class LmStudioService implements ModelBackend, OnDestroy {
   private model = 'google/gemma-3-4b'; // LM Studio usually accepts any string here if one model is loaded
   private lastTool: string = "[]";
   private waitingToolCallCount = 0;
+
+    // [END solution_code]
 
   constructor(private logService: LogService) {
     EventBus.on('model-tool-execution-result', this.handleToolResult, this);

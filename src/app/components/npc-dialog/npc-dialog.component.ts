@@ -112,6 +112,8 @@ Think what will be the next step.`;
       this.npcImage = `assets/gamedata/${data.image}`;
       EventBus.emit('lock-input', true);
 
+      // [START solution_code]
+
       const npcSkills = data.skill;
       const parsedSkills = (typeof npcSkills === 'string' && npcSkills && npcSkills !== '{}') 
         ? JSON.parse(npcSkills) 
@@ -169,6 +171,8 @@ Respond to the player in character. Keep it brief (1-2 sentences).`;
           this.startTyping();
       }
     }
+
+    // [END solution_code]
   }
 
   async handleBackChannel(targetNpc: string, context: string, prompt: string) {

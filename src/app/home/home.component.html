@@ -1,0 +1,36 @@
+<main class="main-layout">
+    <div class="left-panel">
+        <app-chat-panel [messages]="messages"></app-chat-panel>
+    </div>
+    
+    <div class="middle-panel">
+        <div *ngIf="isLoadingModel" class="loading-overlay">
+            <div class="loading-content">
+                <h2>Loading AI Model...</h2>
+                <div class="progress-container">
+                    <div class="progress-bar" [style.width.%]="loadingProgress"></div>
+                </div>
+                <p class="loading-status">{{ loadingStatus }}</p>
+                <p class="loading-percentage">{{ loadingProgress | number:'1.0-0' }}%</p>
+            </div>
+        </div>
+        <div *ngIf="isGodMode" class="god-mode-overlay">
+            GOD MODE
+        </div>
+        <phaser-game *ngIf="!isLoadingModel"></phaser-game>
+    </div>
+
+    <div class="right-panel">
+        <app-right-panel></app-right-panel>
+    </div>
+    
+    <app-confirmation-modal 
+        [isVisible]="isModalVisible" 
+        [linkName]="currentLinkName" 
+        (confirm)="onConfirmLink()" 
+        (cancel)="onCancelLink()">
+    </app-confirmation-modal>
+    
+    <app-npc-dialog></app-npc-dialog>
+    <app-thought-bubble></app-thought-bubble>
+</main>

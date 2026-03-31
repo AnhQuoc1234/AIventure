@@ -1,0 +1,9 @@
+<div class="dialog-overlay" *ngIf="isVisible">
+  <div class="dialog-container">
+    <div class="text-container">
+      <p>{{ displayedText }}<span *ngIf="isTyping" class="cursor">|</span></p>
+      <div class="hint" *ngIf="!isTyping && npcText !== 'Thinking...'">Press any key to close</div>
+      <div class="hint" *ngIf="isTyping && npcText !== 'Thinking...'">Press any key to skip</div>
+    </div>
+  </div>
+</div>

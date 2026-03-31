@@ -1,0 +1,23 @@
+<div class="chat-container">
+  <div class="header">
+    <h1>AIventure</h1>
+  </div>
+
+  <div class="collectibles-tracker">
+    <div *ngFor="let collectible of collectiblesTracker | keyvalue" class="collectible-box">
+      <div class="box-title">{{ collectible.key }}</div>
+      <div class="box-content">
+        <span class="icon">{{ collectible.key.toLowerCase().includes('diamond') ? '💎' : (collectible.key.toLowerCase().includes('star') ? '⭐' : '🔑') }}</span>
+        <span class="cross">x</span>
+        <span class="count">{{ collectible.value.count }}</span>
+        <span class="max">/ {{ collectible.value.max }}</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="chat-area">
+    <div *ngFor="let message of messages" class="message">
+      {{ message }}
+    </div>
+  </div>
+</div>

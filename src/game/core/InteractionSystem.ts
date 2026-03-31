@@ -1,0 +1,142 @@
+import { EventBus } from './EventBus';
+import { InteractionType } from './Constants';
+import { ILevelManager } from './Interfaces';
+import { MovableObject } from './MovableObject';
+import { FunctionCallObject } from "../../app/services/model-types";
+import { TriggerSystem } from './trigger/TriggerSystem';
+import { TriggerType } from './trigger/TriggerTypes';
+import { AgentState } from './AgenticNPC';
+
+export class InteractionSystem
+{
+    private levelManager: ILevelManager;
+    private triggerSystem: TriggerSystem;
+
+    constructor(levelManager: ILevelManager)
+    {
+        this.levelManager = levelManager;
+        this.triggerSystem = new TriggerSystem(levelManager);
+        this.registerEvents();
+    }
+
+    private registerEvents()
+    {
+        EventBus.on('lock-input', this.handleInputLock, this);
+        EventBus.on('model-function-call', this.handleFunctionCall, this);
+        EventBus.on('interaction', this.handleInteraction, this);
+        EventBus.on('movable-moved', this.handleMovableMoved, this);
+        EventBus.on('run-code-snippet', this.handleCodeRun, this);
+        EventBus.on('html-puzzle-solved', this.handleHtmlPuzzleSolved, this);
+    }
+
+    public unregisterEvents()
+    {
+        EventBus.off('lock-input', this.handleInputLock, this);
+        EventBus.off('model-function-call', this.handleFunctionCall, this);
+        EventBus.off('interaction', this.handleInteraction, this);
+        EventBus.off('movable-moved', this.handleMovableMoved, this);
+        EventBus.off('run-code-snippet', this.handleCodeRun, this);
+        EventBus.off('html-puzzle-solved', this.handleHtmlPuzzleSolved, this);
+    }
+
+    private handleHtmlPuzzleSolved(data: { interaction: any })
+    {
+        console.log('HTML Puzzle Solved:', data);
+        this.triggerSystem.processEvent({
+            type: TriggerType.HTML_PUZZLE_SOLVED,
+            payload: data.interaction
+        });
+    }
+
+    private handleCodeRun(data: { interaction: any, code: string, result: any })
+    {
+        console.log('Code executed:', data);
+        this.triggerSystem.processEvent({
+            type: TriggerType.CODE_EXECUTED,
+            payload: data
+        });
+    }
+
+    private handleMovableMoved(data: { movable: MovableObject, gx: number, gy: number })
+    {
+        const { movable, gx, gy } = data;
+        console.log(`Movable ${movable.name} landed on Plate!`);
+
+        this.triggerSystem.processEvent({
+            type: TriggerType.MOVABLE_LANDED,
+            subject: movable,
+            // We could pass the target (Plate/Slot) if we looked it up here, 
+            // but the rule can also imply it if we just say "Movable Landed"
+        });
+    }
+
+    private handleInputLock(locked: boolean)
+    {
+        if (this.levelManager.player)
+        {
+            this.levelManager.player.setLocked(locked);
+        }
+        this.levelManager.agents.forEach(agent => agent.setLocked(locked));
+    }
+
+    private handleInteraction(interaction: any)
+    {
+        switch (interaction.type)
+        {
+            case InteractionType.PORTAL:
+                const link = interaction.linkURL;
+                if (link)
+                {
+                    console.log(`Traversing portal to: ${link}`);
+                    this.levelManager.changeLayout(link);
+                }
+                break;
+
+            case InteractionType.CHAT:
+                this.levelManager.movables.forEach(m => m.reset());
+                break;
+
+            case InteractionType.SWITCH:
+                this.triggerSystem.processEvent({
+                    type: TriggerType.INTERACTION,
+                    payload: interaction
+                });
+                if (interaction.instanceId) {
+                    this.levelManager.flipObject(interaction.instanceId);
+                }
+                break;
+
+            case InteractionType.COLLECTIBLE:
+                this.levelManager.triggerCollectible(interaction.tag);
+                this.levelManager.removeObject(interaction.instanceId);
+                break;
+        }
+    }
+
+    private handleFunctionCall(call: FunctionCallObject)
+    {
+        console.log('Received function call:', call);
+
+        const activeAgent = this.levelManager.agents.find(a =>
+            a.getState() === AgentState.THINKING || a.getState() === AgentState.EXECUTE
+        );
+
+        if (activeAgent)
+        {
+            activeAgent.incrementToolUse();
+            if (activeAgent.getState() === AgentState.FAILED)
+            {
+                console.warn(`Agent ${activeAgent.props.name} failed due to tool use limit.`);
+                return;
+            }
+        }
+
+        this.triggerSystem.processEvent({
+            type: TriggerType.MODEL_FUNCTION,
+            payload: call,
+            subject: activeAgent
+        });
+    }
+
+    // Old helper methods removed as they are now in TriggerSystem
+}

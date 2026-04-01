@@ -34,6 +34,7 @@ export const PUZZLE_RULES: Rule[] = [
             { type: ActionType.OPEN_DOOR, params: { usePayload: true } } // Special param to use linkURL
         ]
     },
+    // [START solution_code]
     // Model: Open Door
     {
         id: 'model_open_door',
@@ -42,6 +43,7 @@ export const PUZZLE_RULES: Rule[] = [
             { type: ActionType.OPEN_DOOR, params: { extractFromFunctionName: '_' } }
         ]
     },
+    // [END solution_code]
     // Model: Light On
     {
         id: 'model_light_on',

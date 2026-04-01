@@ -99,6 +99,8 @@ def format_chat_prompt(request: ChatCompletionRequest) -> str:
         print(f"Chat template failed: {e}")
         return ""
 
+# [START solution_code]
+
 def predict_vertex(prompt: str, max_tokens: int = 2048, temperature: float = 0.7):
     if not aiplatform:
         raise HTTPException(status_code=500, detail="google-cloud-aiplatform not installed")
@@ -124,6 +126,8 @@ def predict_vertex(prompt: str, max_tokens: int = 2048, temperature: float = 0.7
             return prediction[len(prompt):]
         return prediction.replace(prompt, "")
     return str(prediction)
+
+# [END solution_code]
 
 async def stream_vertex_response(response_text, model_name):
     completion_id = f"chatcmpl-{uuid.uuid4()}"

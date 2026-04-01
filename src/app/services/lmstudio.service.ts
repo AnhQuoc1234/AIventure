@@ -62,6 +62,7 @@ export class LmStudioService implements ModelBackend, OnDestroy {
     return JSON.stringify(requestBody);
   }
 
+    // [START tool_code]
   async handleToolResult(result: any) {
     // If we don't have a pending tool call ID, we can't properly respond in OpenAI format.
     // However, we can try to proceed or just log a warning.
@@ -181,6 +182,7 @@ export class LmStudioService implements ModelBackend, OnDestroy {
         console.error("Error in handleToolResult", e);
     }
   }
+    // [END tool_code]
 
   async *generateTextStream(tool_list: string, context: string, prompt: string): AsyncGenerator<string> {
     this.lastTool = tool_list;

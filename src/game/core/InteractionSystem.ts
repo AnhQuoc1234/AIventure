@@ -113,6 +113,7 @@ export class InteractionSystem
         }
     }
 
+    // [START solution_code]
     private handleFunctionCall(call: FunctionCallObject)
     {
         console.log('Received function call:', call);
@@ -137,6 +138,7 @@ export class InteractionSystem
             subject: activeAgent
         });
     }
+    // [END solution_code]
 
     // Old helper methods removed as they are now in TriggerSystem
 }

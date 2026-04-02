@@ -16,7 +16,7 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(),
     // { provide: MODEL_BACKEND, useClass: GeminiService }, // Default, no need to specify if providedIn: 'root' works, but good to have explicit
     // { provide: MODEL_BACKEND, useClass: OllamaService }, // Uncomment to use Ollama
-    // { provide: MODEL_BACKEND, useClass: LmStudioService }, // Uncomment to use LM Studio
+    { provide: MODEL_BACKEND, useClass: LmStudioService }, // Uncomment to use LM Studio
     // { provide: MODEL_BACKEND, useClass: TransformersService } // Uncomment to use transformers.js
   ]
 };

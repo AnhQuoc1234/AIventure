@@ -54,10 +54,39 @@ The UI is divided into 3 major sections:
 
 *   Node.js and npm installed.
 
+### Setting up the Python LLM Service
+
+Follow the README instructions contained in the Python LLM Service folder:
+
+`python-llm-service/README.md`
+
 ### Installation
 
 ```bash
 npm install
+```
+
+### Configuring your model backend
+
+#### Locally-hosted Gemma 4
+
+In `src/app/app.config.ts` uncomment the `LmStudioService` and comment out all other services.
+
+Ensure you have the `python-llm-service` running local server running:
+
+```bash
+cd python-llm-service
+python -m python_llm_service
+```
+
+#### Gemini
+
+In `src/app/app.config.ts` uncomment the `GeminiService` and comment out all other services.
+
+Ensure your API key is set in the environment variables:
+
+```bash
+export GEMINI_API_KEY="your-api-key"
 ```
 
 ### Run Development Server

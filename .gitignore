@@ -48,3 +48,4 @@ package-lock.json
 # Environment
 src/environments/environment.ts
 exports/export.zip
+.env
